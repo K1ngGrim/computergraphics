@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="geometry"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/flolu/Computergrafik/geometry"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="geometry_test">
+				<Option output="/home/flolu/Computergrafik/geometry/geometry_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/flolu/Computergrafik/geometry"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 geometry_test"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="geometry_test/fast">
+				<Option output="/home/flolu/Computergrafik/geometry/geometry_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/flolu/Computergrafik/geometry"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 geometry_test/fast"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="math_test">
+				<Option output="/home/flolu/Computergrafik/geometry/math_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/flolu/Computergrafik/geometry"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 math_test"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="math_test/fast">
+				<Option output="/home/flolu/Computergrafik/geometry/math_test" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/flolu/Computergrafik/geometry"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 math_test/fast"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/flolu/Computergrafik/geometry"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/flolu/Computergrafik/geometry"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/gmake -f &quot;/home/flolu/Computergrafik/geometry/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/flolu/Computergrafik/geometry/geometry.cc">
+			<Option target="geometry_test"/>
+		</Unit>
+		<Unit filename="/home/flolu/Computergrafik/geometry/geometry.h">
+			<Option target="geometry_test"/>
+		</Unit>
+		<Unit filename="/home/flolu/Computergrafik/geometry/geometry_test.cc">
+			<Option target="geometry_test"/>
+		</Unit>
+		<Unit filename="/home/flolu/Computergrafik/geometry/math/math.cc">
+			<Option target="geometry_test"/>
+			<Option target="math_test"/>
+		</Unit>
+		<Unit filename="/home/flolu/Computergrafik/geometry/math/math.h">
+			<Option target="geometry_test"/>
+			<Option target="math_test"/>
+		</Unit>
+		<Unit filename="/home/flolu/Computergrafik/geometry/math/math_test.cc">
+			<Option target="math_test"/>
+		</Unit>
+		<Unit filename="/home/flolu/Computergrafik/geometry/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
