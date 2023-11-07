@@ -5,7 +5,6 @@ AxisAlignedBoundingBox<FLOAT, N>::AxisAlignedBoundingBox(Vector<FLOAT,N> center,
 {
 }
 
-
 template <class FLOAT, size_t N>
 bool AxisAlignedBoundingBox<FLOAT, N>::intersects(AxisAlignedBoundingBox<FLOAT,N> aabb) const {
   bool intersects = true;

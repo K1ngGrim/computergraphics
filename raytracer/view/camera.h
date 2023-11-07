@@ -5,13 +5,13 @@
 
 class Camera {
     public:
-        double focal_length = 1.0;
-        double viewport_height = 2.0;
-        double viewport_width;
-        Vector3df camera_center = {0.0, 0.0, 0.0};
+        float focal_length = 1.f;
+        float viewport_height = 2.f;
+        float viewport_width;
+        Vector3df camera_center = {0.f, 0.f, 0.f};
 
-        Camera(int height, int width) {
-            this->viewport_height * (static_cast<double>(width)/height);
+        Camera(float height, float width) {
+            this->viewport_width = this->viewport_height * width/height;
         }
 };
 

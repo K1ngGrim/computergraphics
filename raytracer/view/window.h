@@ -11,11 +11,11 @@ public:
     bool running = true;
     SDL_Event event;
 
-    int width, height;
+    float width, height;
     const char *windowTitle;
 
     // Konstruktor, Deklaration
-    Window(const char *title, int w, int h)
+    Window(const char *title, float w, float h)
     {
         this->windowTitle = title;
         this->width = w;

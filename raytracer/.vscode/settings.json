@@ -6,7 +6,9 @@
         "*.tcc": "cpp",
         "initializer_list": "cpp",
         "numbers": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "new": "cpp",
+        "random": "cpp"
     },
     "cmake.configureOnOpen": true
 }
