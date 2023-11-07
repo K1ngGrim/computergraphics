@@ -72,8 +72,15 @@
 Sphere3df* sphere;
 
 color ray_color(const Ray3df r) {
-  if(sphere->intersects(r)) {
-    return color{1.f, 0.f, 0.f};
+
+  Intersection_Context<float, 3> intersection;
+
+  bool intersects = sphere->intersects(r, intersection);
+  if(intersects) {
+    if(intersection.t >= 0) {
+      Vector3df N = intersection.normal;
+      return 0.5f*color{N[0]+1.f, N[1]+1.f, N[2]+1.f};
+    }
   }
 
   Vector3df unit_direction = r.direction;
