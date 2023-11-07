@@ -22,6 +22,7 @@ template Vector<float, 3u> operator+(Vector<float, 3u> value, const Vector<float
 template Vector<float, 3u> operator-(Vector<float, 3u> value, const Vector<float, 3u> addend);
 
 template float operator*(Vector<float, 3u> value, const Vector<float, 3u> addend);
+template Vector<float, 3u> operator/(Vector<float, 3u> value, const float factor);
 
 template Vector<float, 4u> operator*(float scalar, Vector<float, 4u> value);
 template Vector<float, 4u> operator+(Vector<float, 4u> value, const Vector<float, 4u> addend);

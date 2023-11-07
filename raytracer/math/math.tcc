@@ -61,6 +61,15 @@ Vector<FLOAT_TYPE, N> operator*(FLOAT_TYPE scalar, Vector<FLOAT_TYPE, N> value) 
 }
 
 template <class FLOAT_TYPE, size_t N>
+Vector<FLOAT_TYPE, N> operator/(const Vector<FLOAT_TYPE, N> value, const FLOAT_TYPE factor) {
+    Vector<FLOAT_TYPE, N> result = value;
+    for (size_t i = 0; i < N; i++) {
+        result[i] /= factor;
+    }
+    return result;
+}
+
+template <class FLOAT_TYPE, size_t N>
 Vector<FLOAT_TYPE, N> operator+(const Vector<FLOAT_TYPE, N> value, const Vector<FLOAT_TYPE, N> addend) {
     Vector<FLOAT_TYPE, N> sum = value;
     sum += addend;

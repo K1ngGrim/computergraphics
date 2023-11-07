@@ -2,7 +2,11 @@
     "C_Cpp.errorSquiggles": "disabled",
     "files.associations": {
         "iostream": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "*.tcc": "cpp",
+        "initializer_list": "cpp",
+        "numbers": "cpp",
+        "vector": "cpp"
     },
     "cmake.configureOnOpen": true
 }

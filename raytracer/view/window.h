@@ -8,6 +8,8 @@ class Window
 public:
     SDL_Window *win;
     SDL_Renderer *renderer;
+    bool running = true;
+    SDL_Event event;
 
     int width, height;
     const char *windowTitle;
@@ -22,6 +24,7 @@ public:
     
     bool Init();
     int Run();
+    void PollEvents();
 
     // Destruktor, Deklaration
     ~Window();

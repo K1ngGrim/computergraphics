@@ -7,7 +7,6 @@ bool Window::Init() {
 	}
 	printf("DEBUG: SDL Successfully Initialized!\n");
 
-
 	this->win = SDL_CreateWindow(
 		this->windowTitle,
 		SDL_WINDOWPOS_CENTERED,
@@ -16,7 +15,6 @@ bool Window::Init() {
 		this->height,
 		0
 	);
-
 
 	if (!this->win) {
 		printf("Error initializing Window: %s\n", SDL_GetError());
@@ -40,7 +38,21 @@ bool Window::Init() {
 	return true;
 }
 
-
 int Window::Run() {
-	if (!this->Init()) return -1;
+	if (!this->Init()) {
+		this->running = false;
+		return -1;
+	} 
+	
+	return 1;
+}
+
+void Window::PollEvents() {
+	while (SDL_PollEvent(&this->event)) {
+		switch (event.type) {
+		case SDL_QUIT:
+			this->running = false;
+			break;
+		}
+	}
 }

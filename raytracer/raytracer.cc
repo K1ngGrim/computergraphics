@@ -6,6 +6,9 @@
 #include <vector>
 #include <algorithm>
 #include "view/window.h"
+#include "view/camera.h"
+#include "utility/color.h"
+#include "utility/helper.h"
 
 // Die folgenden Kommentare beschreiben Datenstrukturen und Funktionen
 // Die Datenstrukturen und Funktionen die weiter hinten im Text beschrieben sind,
@@ -68,21 +71,60 @@
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
 
 
+
+
+void render() {
+
+}
+
 int main(void) {
   // Bildschirm erstellen
+
+  const char* title = "Raytracer";
+  const int width = 512;
+  const int height = 512;
+
+  Window* win = new Window(title, width, height);
+
   // Kamera erstellen
+
+  Camera* cam = new Camera(width, height);
+
+  auto viewport_u = Vector3df{Float(cam->viewport_width), 0, 0};
+  auto viewport_v = Vector3df{0, Float(-cam->viewport_height), 0};
+
+  auto pixel_delta_u = viewport_u / Float(width);
+  auto pixel_delta_v = viewport_v / Float(height);
+
+  Vector3df viewport_upper_left = cam->camera_center - Vector3df{0, 0, Float(cam->focal_length)} - viewport_u/Float(2) - viewport_v/Float(2);
+  auto pixel00_loc = viewport_upper_left + Float(0.5) * (pixel_delta_u + pixel_delta_v);
+
   // Für jede Pixelkoordinate x,y
   //   Sehstrahl für x,y mit Kamera erzeugen
   //   Farbe mit raytracing-Methode bestimmen
   //   Beim Bildschirm die Farbe für Pixel x,y, setzten
 
-  const char* title = "Hello World!";
-  const int width = 640;
-  const int height = 480;
+  win->Run();
 
+  while (win->running) {
+		win->PollEvents();
+    
 
-  Window* win = new Window(title, width, height);
+		for (int j = 0; j < win->height; ++j) {
+      for (int i = 0; i < win->width; ++i) {
 
-  return win->Run();
+        Vector3df pixel_center = pixel00_loc + (Float(i) * pixel_delta_u) + (Float(j) * pixel_delta_v);
+        Vector3df ray_direction = pixel_center - cam->camera_center;
+        Ray3df ray = {cam->camera_center, ray_direction};
+
+        //color pixel_color = ray_color(r);
+        //write_color(std::cout, pixel_color);
+
+        auto pixel_color = color(double(i)/(win->width-1)*255.999, double(j)/(win->height-1)*255.999, double(0)*255.999);
+        render_pixel(win->renderer, pixel_color, i, j);
+      }
+    }
+		SDL_RenderPresent(win->renderer);
+	}
 }
 

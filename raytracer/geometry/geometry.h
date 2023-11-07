@@ -25,6 +25,8 @@ struct Intersection_Context {
 };
 
 
+
+
 // calculates the refracted rays direction (transmission) for the rays direction und a surface normal
 // refraction_index is the quotient of the outside and inside material density 
 // returns true if transmission occurs

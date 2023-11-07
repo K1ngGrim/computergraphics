@@ -13,4 +13,4 @@ add_executable(math_test math/math_test.cc math/math.cc)
 target_link_libraries(math_test gtest gtest_main)
 
 add_executable(raytracer raytracer.cc math/math.cc view/window.cc)
-
+target_link_libraries(raytracer SDL2)

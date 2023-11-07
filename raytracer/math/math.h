@@ -69,6 +69,9 @@ struct Vector {
   template <class F, size_t K>    
   friend Vector<F, K> operator+(const Vector<F, K> value, const Vector<F, K> addend);
 
+  template <class F, size_t K>
+  friend Vector<F, K>  operator/(const Vector<F, K> value, F scalar);
+
   // returns the vector difference value - minuend
   template <class F, size_t K>    
   friend Vector<F, K> operator-(const Vector<F, K> value, const Vector<F, K> minuend);
