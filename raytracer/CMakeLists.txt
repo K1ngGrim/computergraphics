@@ -12,5 +12,5 @@ target_link_libraries(geometry_test gtest gtest_main)
 add_executable(math_test math/math_test.cc math/math.cc)
 target_link_libraries(math_test gtest gtest_main)
 
-add_executable(raytracer raytracer.cc math/math.cc view/window.cc geometry/geometry.cc)
+add_executable(raytracer raytracer.cc math/math.cc view/window.cc view/camera.cc utility/color.cc geometry/geometry.cc world/world.cc)
 target_link_libraries(raytracer SDL2)

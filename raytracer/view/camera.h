@@ -2,6 +2,8 @@
 #define CAMERA_H
 
 #include "./../math/math.h"
+#include "../utility/color.h"
+#include "../world/world.h"
 
 class Camera {
     public:
@@ -11,8 +13,10 @@ class Camera {
         Vector3df camera_center = {0.f, 0.f, 0.f};
 
         Camera(float height, float width) {
-            this->viewport_width = this->viewport_height * width/height;
+            this->viewport_width = this->viewport_height * double(width/height);
         }
+
+        color cast_ray(Ray3df ray, World* world);
 };
 
 

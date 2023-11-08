@@ -8,6 +8,7 @@
 #include "view/window.h"
 #include "view/camera.h"
 #include "utility/color.h"
+#include "world/world.h"
 
 // Die folgenden Kommentare beschreiben Datenstrukturen und Funktionen
 // Die Datenstrukturen und Funktionen die weiter hinten im Text beschrieben sind,
@@ -69,13 +70,12 @@
 
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
 
-Sphere3df* sphere;
-
-color ray_color(const Ray3df r) {
+/**
+color ray_color(const Ray3df r, Sphere3df sphere) {
 
   Intersection_Context<float, 3> intersection;
 
-  bool intersects = sphere->intersects(r, intersection);
+  bool intersects = sphere.intersects(r, intersection);
   if(intersects) {
     if(intersection.t >= 0) {
       Vector3df N = intersection.normal;
@@ -90,19 +90,33 @@ color ray_color(const Ray3df r) {
   auto b = (1.0f-a)*color{1.f, 1.f, 1.f} + a*color{0.5f, 0.7f, 1.f};
   return b;
 }
+*/
 
 int main(void) {
   // Bildschirm erstellen
 
   const char* title = "Raytracer";
-  const float width = 512.f;
-  const float height = 512.f;
+
+  auto aspect_ratio = 1.0f / 1.f;
+
+  const float width = 720.f;
+  const float height = float(width / aspect_ratio) < 1 ? 1 : float(width / aspect_ratio);
 
   Window* win = new Window(title, width, height);
 
   // Kamera erstellen
 
   Camera* cam = new Camera(width, height);
+
+  WorldObject obj1 = WorldObject({ { 0.4f, 0.0f, -0.8f }, 0.3f }, { 1.f, 0.f, 0.f });
+  WorldObject obj2 = WorldObject({ { -0.4f, 0.0f, -0.8f }, 0.1f }, { 0.f, 1.f, 0.f });
+  WorldObject obj3 = WorldObject({ { 0.0f, 0.5f, -0.8f }, 0.1f }, { 0.f, 0.f, 1.f });
+
+  World* world = new World();
+
+  world->add(obj1);
+  world->add(obj2);
+  world->add(obj3);
 
   printf("Viewport: %fH %fW", cam->viewport_height, cam->viewport_width);
 
@@ -114,8 +128,6 @@ int main(void) {
 
   Vector3df viewport_upper_left = cam->camera_center - Vector3df{0, 0, cam->focal_length} - viewport_u/2.f - viewport_v/2.f;
   auto pixel00_loc = viewport_upper_left + (0.5f * (pixel_delta_u + pixel_delta_v));
-
-  sphere = new Sphere3df({ 0.0f, 0.0f, -1.f }, 0.1f);
 
   // Für jede Pixelkoordinate x,y
   //   Sehstrahl für x,y mit Kamera erzeugen
@@ -134,15 +146,17 @@ int main(void) {
         Vector3df ray_direction = pixel_center - cam->camera_center;
         Ray3df ray = {cam->camera_center, ray_direction};
 
-        //color pixel_color = ray_color(r);
-        //write_color(std::cout, pixel_color);
-
-        //auto p_color = color{float(i)/(win->width-1.f), float(j)/(win->height-1.f), 0.f};
-        color p_color = ray_color(ray);
+        color p_color = cam->cast_ray(ray, world);
         render_pixel(win->renderer, p_color, i, j);
       }
     }
 		SDL_RenderPresent(win->renderer);
+    
+
+    while(win->running) {
+      win->PollEvents();
+      SDL_Delay(100);
+    }
 	}
 }
 
