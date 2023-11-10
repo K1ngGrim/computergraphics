@@ -4,11 +4,12 @@
 #include "./../math/math.h"
 #include "../utility/color.h"
 #include "../world/world.h"
+#include "../geometry/geometry.h"
 
 class Camera {
     public:
-        float focal_length = 1.f;
-        float viewport_height = 2.f;
+        float focal_length = 5.f;
+        float viewport_height = 9.f;
         float viewport_width;
         Vector3df camera_center = {0.f, 0.f, 0.f};
 
@@ -17,6 +18,8 @@ class Camera {
         }
 
         color cast_ray(Ray3df ray, World* world);
+
+        static float lambertian(Light light, Intersection_Context<float, 3> context);
 };
 
 

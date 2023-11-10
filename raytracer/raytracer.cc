@@ -1,6 +1,6 @@
 #undef main
 
-#include "math.h"
+#include <cmath>
 #include "geometry/geometry.h"
 #include <iostream>
 #include <vector>
@@ -8,6 +8,7 @@
 #include "view/window.h"
 #include "view/camera.h"
 #include "utility/color.h"
+#include "utility/light.h"
 #include "world/world.h"
 
 // Die folgenden Kommentare beschreiben Datenstrukturen und Funktionen
@@ -70,63 +71,42 @@
 
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
 
-/**
-color ray_color(const Ray3df r, Sphere3df sphere) {
-
-  Intersection_Context<float, 3> intersection;
-
-  bool intersects = sphere.intersects(r, intersection);
-  if(intersects) {
-    if(intersection.t >= 0) {
-      Vector3df N = intersection.normal;
-      return 0.5f*color{N[0]+1.f, N[1]+1.f, N[2]+1.f};
-    }
-  }
-
-  Vector3df unit_direction = r.direction;
-  unit_direction.normalize();
-  auto a = 0.5f*(unit_direction[1] + 1.0f);
-  
-  auto b = (1.0f-a)*color{1.f, 1.f, 1.f} + a*color{0.5f, 0.7f, 1.f};
-  return b;
-}
-*/
-
 int main(void) {
-  // Bildschirm erstellen
 
-  const char* title = "Raytracer";
-
-  auto aspect_ratio = 1.0f / 1.f;
-
-  const float width = 720.f;
-  const float height = float(width / aspect_ratio) < 1 ? 1 : float(width / aspect_ratio);
-
-  Window* win = new Window(title, width, height);
+  auto* win = new Window("Raytracer", 720.f);
 
   // Kamera erstellen
 
-  Camera* cam = new Camera(width, height);
+  auto* cam = new Camera(win->height, win->width);
 
-  WorldObject obj1 = WorldObject({ { 0.4f, 0.0f, -0.8f }, 0.3f }, { 1.f, 0.f, 0.f });
-  WorldObject obj2 = WorldObject({ { -0.4f, 0.0f, -0.8f }, 0.1f }, { 0.f, 1.f, 0.f });
-  WorldObject obj3 = WorldObject({ { 0.0f, 0.5f, -0.8f }, 0.1f }, { 0.f, 0.f, 1.f });
+  WorldObject obj1 = WorldObject({ { 10021.f, 0.0f, 0.f }, 10000.f }, { 1.f, 0.f, 0.f });
+  WorldObject obj2 = WorldObject({ { -10021.f, 0.0f, 0.f }, 10000.f }, { 0.f, 1.f, 0.f });
+  WorldObject obj4 = WorldObject({ { 0.f, -10012.0f, 0.f }, 10000.f }, { 1.f, 0.f, 1.f });
+  WorldObject obj5 = WorldObject({ { 0.f, 10012.0f, 0.f }, 10000.f }, { 1.f, 1.f, 0.f });
+  WorldObject obj3 = WorldObject({ { 0.0f, 0.0f, -10030.f }, 10000.f }, { 0.f, 0.f, 1.f });
+  WorldObject obj6 = WorldObject({ {0.f, -2.f, -10.f}, 1.f }, { 0.5f, 0.5f, 1.f });
 
-  World* world = new World();
+  PointLight light = PointLight({0.f, 1.f, -5.f});
 
+  auto* world = new World();
+
+  world->lights.push_back(light);
+  world->add(obj6);
   world->add(obj1);
   world->add(obj2);
   world->add(obj3);
+  world->add(obj4);
+  world->add(obj5);
 
-  printf("Viewport: %fH %fW", cam->viewport_height, cam->viewport_width);
+  printf("Viewport: %fW %fH \n", cam->viewport_width, cam->viewport_height);
 
-  auto viewport_u = Vector3df{cam->viewport_width, 0, 0};
-  auto viewport_v = Vector3df{0, -cam->viewport_height, 0};
+  auto viewport_u = Vector3df{cam->viewport_width, 0, 0.f};
+  auto viewport_v = Vector3df{0, -cam->viewport_height, 0.f};
 
-  auto pixel_delta_u = viewport_u / width;
-  auto pixel_delta_v = viewport_v / height;
+  auto pixel_delta_u = viewport_u / win->width;
+  auto pixel_delta_v = viewport_v / win->height;
 
-  Vector3df viewport_upper_left = cam->camera_center - Vector3df{0, 0, cam->focal_length} - viewport_u/2.f - viewport_v/2.f;
+  Vector3df viewport_upper_left = cam->camera_center - Vector3df{0.f, 0.f, cam->focal_length} - viewport_u/2.f - viewport_v/2.f;
   auto pixel00_loc = viewport_upper_left + (0.5f * (pixel_delta_u + pixel_delta_v));
 
   // Für jede Pixelkoordinate x,y

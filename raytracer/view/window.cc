@@ -56,3 +56,5 @@ void Window::PollEvents() {
 		}
 	}
 }
+
+Window::~Window() = default;

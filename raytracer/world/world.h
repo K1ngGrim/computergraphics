@@ -3,6 +3,7 @@
 
 #include "../geometry/geometry.h"
 #include "../utility/color.h"
+#include "../utility/light.h"
 
 class WorldObject {
 public:
@@ -17,10 +18,13 @@ public:
     World();
 
     std::vector<WorldObject> objects;
+    std::vector<Light> lights;
+
     void add(WorldObject s);
     WorldObject get(int index);
 
-    WorldObject* find_nearest_object(Ray3df ray);
+    bool ray_intersects_any(Ray3df ray, Intersection_Context<float, 3> context);
+    WorldObject* find_nearest_object(Ray3df ray, Intersection_Context<float, 3> &fc);
 };
 
 #endif

@@ -5,21 +5,23 @@
 
 class Window
 {
+private:
+    float aspect_ratio = 16.0f / 9.f;
 public:
-    SDL_Window *win;
-    SDL_Renderer *renderer;
+    SDL_Window *win{};
+    SDL_Renderer *renderer{};
     bool running = true;
-    SDL_Event event;
+    SDL_Event event{};
 
     float width, height;
     const char *windowTitle;
 
     // Konstruktor, Deklaration
-    Window(const char *title, float w, float h)
+    Window(const char *title, float w)
     {
         this->windowTitle = title;
         this->width = w;
-        this->height = h;
+        this->height = float(w / this->aspect_ratio) < 1 ? 1 : float(w / this->aspect_ratio);
     }
     
     bool Init();
