@@ -53,6 +53,22 @@ void Window::PollEvents() {
 		case SDL_QUIT:
 			this->running = false;
 			break;
+        case SDL_KEYDOWN:
+            switch( event.key.keysym.sym ){
+                case SDLK_LEFT: {
+                    Vector3df p = {0.5f, 0.f, 0.f};
+                    Vector3df v = this->cam->camera_center + p;
+                    this->cam->camera_center = v;
+                    break;
+                }
+                case SDLK_RIGHT: {
+                    Vector3df p = {-0.5f, 0.f, 0.f};
+                    Vector3df v = this->cam->camera_center + p;
+                    this->cam->camera_center = v;
+                    break;
+                }
+            }
+            break;
 		}
 	}
 }

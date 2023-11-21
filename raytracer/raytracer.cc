@@ -5,11 +5,14 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <ctime>
 #include "view/window.h"
 #include "view/camera.h"
 #include "utility/color.h"
 #include "utility/light.h"
 #include "world/world.h"
+
+using namespace std;
 
 // Die folgenden Kommentare beschreiben Datenstrukturen und Funktionen
 // Die Datenstrukturen und Funktionen die weiter hinten im Text beschrieben sind,
@@ -71,24 +74,44 @@
 
 // Die rekursive raytracing-Methode. Am besten ab einer bestimmten Rekursionstiefe (z.B. als Parameter übergeben) abbrechen.
 
+void takeScreenshot(Window *win) {
+    SDL_Surface *sshot = SDL_CreateRGBSurface(0, win->width, win->height, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+    SDL_RenderReadPixels(win->renderer, NULL, SDL_PIXELFORMAT_ARGB8888, sshot->pixels, sshot->pitch);
+
+    time_t now = time(0);
+    std::string dt = ctime(&now);
+    std::replace(dt.begin(), dt.end(), ':', '-');
+    std::replace(dt.begin(), dt.end(), ' ', '-');
+
+    dt = "./screenshots/screenshot" + dt;
+    dt = dt + ".bmp";
+    SDL_SaveBMP(sshot, dt.c_str());
+    SDL_FreeSurface(sshot);
+}
+
+Camera* cam;
+
 int main(void) {
 
-  auto* win = new Window("Raytracer", 720.f);
+
+    auto* win = new Window("Raytracer", 400.f, cam);
 
   // Kamera erstellen
+    cam = new Camera(win->height, win->width);
+    win->cam = cam;
 
-  auto* cam = new Camera(win->height, win->width);
+  WorldObject obj1 = WorldObject({ { 10021.f, 0.0f, 0.f }, 10000.f },{{0.01f, 1.f, 0.01f}, 0});
+  WorldObject obj2 = WorldObject({ { -10021.f, 0.0f, 0.f }, 10000.f }, {{1.f, 0.f, 0.f}, 0});
+  WorldObject obj4 = WorldObject({ { 0.f, -10012.0f, 0.f }, 10000.f }, {{1.f, 1.f, 1.f}, 0});
+  WorldObject obj5 = WorldObject({ { 0.f, 10012.0f, 0.f }, 10000.f }, {{1.f, 1.f, 1.f}, 0});
+  WorldObject obj3 = WorldObject({ { 0.0f, 0.0f, -10030.f }, 10000.f }, {{1.f, 1.f, 1.f}, 0});
 
-  WorldObject obj1 = WorldObject({ { 10021.f, 0.0f, 0.f }, 10000.f }, { 1.f, 0.f, 0.f });
-  WorldObject obj2 = WorldObject({ { -10021.f, 0.0f, 0.f }, 10000.f }, { 0.f, 1.f, 0.f });
-  WorldObject obj4 = WorldObject({ { 0.f, -10012.0f, 0.f }, 10000.f }, { 1.f, 0.f, 1.f });
-  WorldObject obj5 = WorldObject({ { 0.f, 10012.0f, 0.f }, 10000.f }, { 1.f, 1.f, 0.f });
-  WorldObject obj3 = WorldObject({ { 0.0f, 0.0f, -10030.f }, 10000.f }, { 0.f, 0.f, 1.f });
-  WorldObject obj6 = WorldObject({ {0.f, -2.f, -10.f}, 1.f }, { 0.5f, 0.5f, 1.f });
+  WorldObject obj6 = WorldObject({ {3.f, -8.f, -15.f}, 1.f }, {{0.5f, 0.5f, 1.f}, 0});
+  WorldObject obj7 = WorldObject({ {-14.f, -8.f, -17.f}, 3.f }, {{1.f, 1.f, 1.f}, 1});
 
-  PointLight light = PointLight({0.f, 1.f, -5.f});
+  PointLight light = PointLight({5.f, 11.f, -18.f});
 
-  auto* world = new World();
+  auto world = new World();
 
   world->lights.push_back(light);
   world->add(obj6);
@@ -97,17 +120,10 @@ int main(void) {
   world->add(obj3);
   world->add(obj4);
   world->add(obj5);
+  world->add(obj7);
 
   printf("Viewport: %fW %fH \n", cam->viewport_width, cam->viewport_height);
 
-  auto viewport_u = Vector3df{cam->viewport_width, 0, 0.f};
-  auto viewport_v = Vector3df{0, -cam->viewport_height, 0.f};
-
-  auto pixel_delta_u = viewport_u / win->width;
-  auto pixel_delta_v = viewport_v / win->height;
-
-  Vector3df viewport_upper_left = cam->camera_center - Vector3df{0.f, 0.f, cam->focal_length} - viewport_u/2.f - viewport_v/2.f;
-  auto pixel00_loc = viewport_upper_left + (0.5f * (pixel_delta_u + pixel_delta_v));
 
   // Für jede Pixelkoordinate x,y
   //   Sehstrahl für x,y mit Kamera erzeugen
@@ -115,28 +131,33 @@ int main(void) {
   //   Beim Bildschirm die Farbe für Pixel x,y, setzten
 
   win->Run();
-
+  bool tookScreenshot = false;
   while (win->running) {
-		win->PollEvents();
-    
-		for (int j = 0; j < win->height; ++j) {
-      for (int i = 0; i < win->width; ++i) {
+      auto viewport_u = Vector3df{cam->viewport_width, 0, 0.f};
+      auto viewport_v = Vector3df{0, -cam->viewport_height, 0.f};
 
-        Vector3df pixel_center = pixel00_loc + (float(i) * pixel_delta_u) + (float(j) * pixel_delta_v);
-        Vector3df ray_direction = pixel_center - cam->camera_center;
-        Ray3df ray = {cam->camera_center, ray_direction};
+      auto pixel_delta_u = viewport_u / win->width;
+      auto pixel_delta_v = viewport_v / win->height;
 
-        color p_color = cam->cast_ray(ray, world);
-        render_pixel(win->renderer, p_color, i, j);
-      }
-    }
-		SDL_RenderPresent(win->renderer);
-    
-
-    while(win->running) {
+      Vector3df viewport_upper_left = cam->camera_center - Vector3df{0.f, 0.f, cam->focal_length} - viewport_u/2.f - viewport_v/2.f;
+      auto pixel00_loc = viewport_upper_left + (0.5f * (pixel_delta_u + pixel_delta_v));
       win->PollEvents();
-      SDL_Delay(100);
-    }
+      for (int j = 0; j < int(win->height); ++j) {
+          for (int i = 0; i < int(win->width); ++i) {
+            Vector3df pixel_center = pixel00_loc + (float(i) * pixel_delta_u) + (float(j) * pixel_delta_v);
+            Vector3df ray_direction = pixel_center - cam->camera_center;
+            Ray3df ray = {cam->camera_center, ray_direction};
+
+            color p_color = cam->ray_color(ray, world, 10);
+            render_pixel(win->renderer, p_color, i, j);
+            }
+        }
+        SDL_RenderPresent(win->renderer);
+
+        if(!tookScreenshot) {
+            takeScreenshot(win);
+            tookScreenshot = true;
+        }
 	}
 }
 

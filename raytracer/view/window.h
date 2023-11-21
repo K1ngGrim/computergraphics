@@ -2,6 +2,8 @@
 #define WINDOW_H
 
 #include <SDL2/SDL.h>
+#include "camera.h"
+#include "viewport.h"
 
 class Window
 {
@@ -12,16 +14,19 @@ public:
     SDL_Renderer *renderer{};
     bool running = true;
     SDL_Event event{};
-
+    Camera* cam;
+    Viewport* viewport;
     float width, height;
     const char *windowTitle;
 
     // Konstruktor, Deklaration
-    Window(const char *title, float w)
+    Window(const char *title, float w, Camera* cam)
     {
         this->windowTitle = title;
         this->width = w;
         this->height = float(w / this->aspect_ratio) < 1 ? 1 : float(w / this->aspect_ratio);
+        this->cam = cam;
+        this->viewport = new Viewport(*cam, this->width, this->height);
     }
     
     bool Init();

@@ -8,15 +8,15 @@ class Light {
 private:
 public:
     Vector3df center = {0.f, 0.f, 0.f};
-    color lightColor = {1.f, 1.f, 1.f};
+    color lightColor = {0.984f, 0.945f, 0.725f};
 
 protected:
-    Light(Vector3df center);
+    explicit Light(Vector3df center);
 };
 
 class PointLight : public Light {
 public:
-    PointLight(Vector3df center) : Light(center) {
+    explicit PointLight(Vector3df center) : Light(center) {
 
     };
 };

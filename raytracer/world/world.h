@@ -4,12 +4,13 @@
 #include "../geometry/geometry.h"
 #include "../utility/color.h"
 #include "../utility/light.h"
+#include "objects/material.h"
 
 class WorldObject {
 public:
-    WorldObject(Sphere3df sphere, color c);
+    WorldObject(Sphere3df sphere, Material c);
     WorldObject();
-    color material = {0.f, 0.f, 0.f};
+    Material material {};
     Sphere3df sphere = Sphere3df({ 0.0f, 0.0f, 0.f }, 0.f);
 };
 
@@ -25,6 +26,10 @@ public:
 
     bool ray_intersects_any(Ray3df ray, Intersection_Context<float, 3> context);
     WorldObject* find_nearest_object(Ray3df ray, Intersection_Context<float, 3> &fc);
+};
+
+class LambertianSphere : WorldObject {
+public:
 };
 
 #endif

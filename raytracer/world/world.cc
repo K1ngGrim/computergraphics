@@ -40,7 +40,7 @@ WorldObject* World::find_nearest_object(Ray3df ray, Intersection_Context<float, 
     return new WorldObject(nearest.sphere, nearest.material);
 }
 
-WorldObject::WorldObject(Sphere3df sphere, color c) {
+WorldObject::WorldObject(Sphere3df sphere, Material c) {
     this->material = c;
     this->sphere = sphere;
 }

@@ -5,6 +5,7 @@
 #include <array>
 #include <cstddef>
 #include <cmath>
+#include <random>
 
 // A Vector consisting of N scalar values of type FLOAT_TYPE
 template<class FLOAT_TYPE, size_t N>
@@ -85,7 +86,6 @@ struct Vector {
 
   FLOAT_TYPE square_of_length() const;
 
-
   // returns the scalar (inner) product of two Vectors
   template <class F, size_t K>
   friend F operator*(Vector<F, K> vector1, const Vector<F, K> vector2);
@@ -97,5 +97,46 @@ static const long double PI = std::acos(-1.0L);
 typedef Vector<float, 2u> Vector2df;
 typedef Vector<float, 3u> Vector3df;
 typedef Vector<float, 4u> Vector4df;
+
+inline float random_float() {
+    // Returns a random real in [0,1).
+    return rand() / (RAND_MAX + 1.0);
+}
+
+inline float random_float(float min, float max) {
+    // Returns a random real in [min,max).
+    return min + (max-min)*random_float();
+}
+
+static inline Vector3df vector_rand() {
+    return {(float) rand(), (float) rand(), (float) rand()};
+}
+
+static inline Vector3df vector_rand(float min, float max) {
+    return {random_float(min,max), random_float(min,max), random_float(min,max)};
+}
+
+inline Vector3df random_in_unit_sphere() {
+    while (true) {
+        auto p = vector_rand();
+        p.normalize();
+        if (p.square_of_length() <= 1)
+            return p;
+    }
+}
+
+inline Vector3df random_unit_vector() {
+    auto vec = random_in_unit_sphere();
+    vec.normalize();
+    return vec;
+}
+
+inline Vector3df random_on_hemisphere(const Vector3df& normal) {
+    Vector3df on_unit_sphere = random_unit_vector();
+    if (on_unit_sphere * normal > 0.0) // In the same hemisphere as the normal
+        return on_unit_sphere;
+    else
+        return -1.f * on_unit_sphere;
+}
 
 #endif
