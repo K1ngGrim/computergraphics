@@ -8,7 +8,7 @@ class Light {
 private:
 public:
     Vector3df center = {0.f, 0.f, 0.f};
-    color lightColor = {0.984f, 0.945f, 0.725f};
+    color lightColor = {0.984f, 0.145f, 0.125f};
 
 protected:
     explicit Light(Vector3df center);

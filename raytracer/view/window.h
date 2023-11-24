@@ -16,21 +16,24 @@ public:
     SDL_Event event{};
     Camera* cam;
     Viewport* viewport;
+    World* world;
     float width, height;
     const char *windowTitle;
 
     // Konstruktor, Deklaration
-    Window(const char *title, float w, Camera* cam)
+    Window(const char *title, float w, World* world)
     {
         this->windowTitle = title;
         this->width = w;
+        this->world = world;
         this->height = float(w / this->aspect_ratio) < 1 ? 1 : float(w / this->aspect_ratio);
-        this->cam = cam;
+        this->cam = new Camera(this->height, this->width);
         this->viewport = new Viewport(*cam, this->width, this->height);
     }
     
     bool Init();
     int Run();
+    void Render() const;
     void PollEvents();
 
     // Destruktor, Deklaration

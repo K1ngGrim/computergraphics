@@ -118,7 +118,7 @@ float Camera::lambertian(World* world, Light light, Intersection_Context<float, 
     world->find_nearest_object(newRay, c);
 
     if(c.t > 0.f && c.t < 1.f)
-        return 0.f;
+        return 0.1f;
 
     toLight.normalize();
 
