@@ -455,7 +455,7 @@ bool OpenGLRenderer::init() {
 }
 
 /* tile positions in world coordinates
-   used to draw objects seemless between boundary
+   used to draw objects seamless between boundary
   +---+---+---+   
   | 5 | 7 | 2 |
   +---+---+---+
@@ -476,16 +476,48 @@ static Vector2df tile_positions [] = {
                          {0.0f, -768.0f} };
 
 void OpenGLRenderer::render() {
-  debug(2, "render() entry...");
+    debug(2, "render() entry...");
 
-  // transformation to canonical view and from left handed to right handed coordinates
-  SquareMatrix4df world_transformation =
-                         SquareMatrix4df{
-                           { 2.0f / 1024.0f,           0.0f,            0.0f,  0.0f},
-                           {       0.0f,     -2.0f / 768.0f,            0.0f,  0.0f}, // (negative, because we have a left handed world coord. system)
-                           {       0.0f,               0.0f,  2.0f / 1024.0f,  0.0f},
-                           {      -1.0f,               1.0f,           -1.0f,  1.0f}
-                         };
+    bool ship_exists = game.ship_exists();
+
+    // transformation to canonical view and from left handed to right handed coordinates
+    SquareMatrix4df world_transformation =
+            SquareMatrix4df{
+                    {2.0f / 1024.0f, 0.0f, 0.0f, 0.0f},
+                    {0.0f, -2.0f / 768.0f, 0.0f, 0.0f}, // (negative, because we have a left handed world coord. system)
+                    {0.0f, 0.0f, 2.0f / 1024.0f, 0.0f},
+                    {-1.0f, 1.0f, -1.0f, 1.0f}};
+
+    SquareMatrix4df final_transformation = world_transformation; // init with world transformation if the ship does not exist
+    auto viewportWidth = (float) this->window_width;
+    auto viewportHeight = (float) this->window_height;
+    Vector2df spaceshipTranslation = {0.0f, 0.0f};
+    if (ship_exists)
+    {
+        debug(2, "render(): ship exists - applying translation");
+
+        // add i * viewportWidth/Height to indicate which sector we are rendering
+        // in the sector where we actually want to display the ship, nothing gets added as the loop is from -1 to 1
+
+        // Calculate the translation for the spaceship
+         // Default translation values
+
+        Spaceship *ship = game.get_ship();
+
+        spaceshipTranslation[0] = ((viewportWidth / 2.5f) - ship->get_position()[0]);
+        spaceshipTranslation[1] = ((viewportHeight / 2.5f) - ship->get_position()[1]);
+
+        // Apply translation for the spaceship
+        // Since this is column-based ordering, apply to X and Y Coordinates of 4x4 Matrix
+        SquareMatrix4df spaceshipTranslationMatrix = {
+                {1.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, 1.0f, 0.0f, 0.0f},
+                {0.0f, 0.0f, 1.0f, 0.0f},
+                {spaceshipTranslation[0], spaceshipTranslation[1], 0.0f, 1.0f}};
+
+        // Apply the transformations in "reversed" order because of the column-based ordering
+        final_transformation = world_transformation * spaceshipTranslationMatrix;
+    }
                                                  
   glClearColor ( 0.0, 0.0, 0.0, 1.0 );
   glClear ( GL_COLOR_BUFFER_BIT );
@@ -493,7 +525,7 @@ void OpenGLRenderer::render() {
   debug(2, "remove views for deleted objects");
 
   // remove all views for typed bodies that have to be deleted 
-  erase_if(views, []( std::unique_ptr<TypedBodyView> & view) { return view->get_typed_body()->is_marked_for_deletion();}); 
+  erase_if(views, []( std::unique_ptr<TypedBodyView> & view) { return view->get_typed_body()->is_marked_for_deletion();});
 
   auto new_bodies = game.get_physics().get_recently_added_bodies();
   for (Body2df * body : new_bodies) {
@@ -516,15 +548,32 @@ void OpenGLRenderer::render() {
   }
 
   debug(2, "render all views");
-  for (auto & view : views) {
-    view->render( world_transformation );
-  }
+
+    for (const auto& tilePos : tile_positions) {
+        Vector2df tileTranslation = {
+                tilePos[0] + spaceshipTranslation[0],
+                tilePos[1] + spaceshipTranslation[1]
+        };
+
+        SquareMatrix4df tileTranslationMatrix = {
+                {1.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, 1.0f, 0.0f, 0.0f},
+                {0.0f, 0.0f, 1.0f, 0.0f},
+                {tileTranslation[0], tileTranslation[1], 0.0f, 1.0f}
+        };
+
+        final_transformation = world_transformation * tileTranslationMatrix;
+
+        for (auto &view : views) {
+            view->render(final_transformation);
+        }
+    }
   
   renderFreeShips(world_transformation);
   renderScore(world_transformation);
 
   SDL_GL_SwapWindow(window);
-  debug(2, "render() exit.");
+  debug(2, "render() exit.")
 }
 
 void OpenGLRenderer::exit() {
