@@ -478,8 +478,6 @@ static Vector2df tile_positions [] = {
 void OpenGLRenderer::render() {
     debug(2, "render() entry...");
 
-    bool ship_exists = game.ship_exists();
-
     // transformation to canonical view and from left handed to right handed coordinates
     SquareMatrix4df world_transformation =
             SquareMatrix4df{
@@ -489,10 +487,10 @@ void OpenGLRenderer::render() {
                     {-1.0f, 1.0f, -1.0f, 1.0f}};
 
     SquareMatrix4df final_transformation = world_transformation; // init with world transformation if the ship does not exist
-    auto viewportWidth = (float) this->window_width;
-    auto viewportHeight = (float) this->window_height;
+    auto viewportWidth = (float) 1024;
+    auto viewportHeight = (float) 700;
     Vector2df spaceshipTranslation = {0.0f, 0.0f};
-    if (ship_exists)
+    if (game.ship_exists())
     {
         debug(2, "render(): ship exists - applying translation");
 
@@ -504,8 +502,8 @@ void OpenGLRenderer::render() {
 
         Spaceship *ship = game.get_ship();
 
-        spaceshipTranslation[0] = ((viewportWidth / 2.5f) - ship->get_position()[0]);
-        spaceshipTranslation[1] = ((viewportHeight / 2.5f) - ship->get_position()[1]);
+        spaceshipTranslation[0] = ((viewportWidth / 2.f) - ship->get_position()[0]);
+        spaceshipTranslation[1] = ((viewportHeight / 2.f) - ship->get_position()[1]);
 
         // Apply translation for the spaceship
         // Since this is column-based ordering, apply to X and Y Coordinates of 4x4 Matrix
